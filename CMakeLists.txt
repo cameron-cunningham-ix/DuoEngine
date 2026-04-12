@@ -107,9 +107,9 @@ target_link_libraries(DuoEngine PRIVATE glm::glm glad imgui nfd)
 
 # Warnings
 if(MSVC)
-  target_compile_options(DuoEngine PRIVATE /W4 /permissive- /Zc:preprocessor /utf-8)
+  target_compile_options(DuoEngine PRIVATE /W4 /wd4101 /permissive- /Zc:preprocessor /utf-8)
 else()
-  target_compile_options(DuoEngine PRIVATE -Wall -Wextra -Wpedantic)
+  target_compile_options(DuoEngine PRIVATE -Wall -Wextra -Wpedantic -Wno-unused-parameter)
 endif()
 
 # Nice output layout (esp. on MSVC multi-config)

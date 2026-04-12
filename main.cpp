@@ -10,6 +10,10 @@ static void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
+
 int main(int, char**) {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit()) {
@@ -36,6 +40,8 @@ int main(int, char**) {
         return 1;
     };
     glfwSwapInterval(1);    // Enable vsync
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
     
     // Setup ImGui context
     IMGUI_CHECKVERSION();
@@ -61,10 +67,6 @@ int main(int, char**) {
             ImGui_ImplGlfw_Sleep(10);
             continue;
         }
-
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
 
         glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
