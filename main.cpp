@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 static void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -12,6 +13,31 @@ static void glfw_error_callback(int error, const char* description) {
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
+}
+
+
+void checkShaderCompilation(unsigned int shader) {
+    // Check compilation
+    int success;
+    char info_log[512];
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);  // Checks if shader compilation succeeded
+
+    if (!success) {
+        glGetShaderInfoLog(shader, 512, nullptr, info_log);
+        std::cout << "Error::SHADER::VERTEX::COMPILATION_FAILED\n" << info_log << std::endl;
+    }
+}
+
+void checkProgramCompilation(unsigned int shader_program) {
+    // Check compilation
+    int success;
+    char info_log[512];
+    glGetProgramiv(shader_program, GL_LINK_STATUS, &success);  // Checks if compilation succeeded
+
+    if (!success) {
+        glGetProgramInfoLog(shader_program, 512, nullptr, info_log);
+        std::cout << "Error::PROGRAM::COMPILATION_FAILED\n" << info_log << std::endl;
+    }
 }
 
 int main(int, char**) {
@@ -59,6 +85,93 @@ int main(int, char**) {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+    // OpenGL basics
+    // Triangle vertices
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f,  0.5f, 0.0f,
+    };
+    // Vertex array object
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    // Vertex buff object
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);  // Creates one buffer object
+     // Binding the VBO buffer means any buffer calls made on the GL_ARRAY_BUFFER target will configure VBO.
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // We copy the triangle vertex data into the buffer's memory. 
+    // 1st param: buffer type we want to copy data into; this is why we just bound VBO.
+    // 2nd param: size of data in bytes. 
+    // 3rd param: Actual data
+    // 4th param: How we want the GPU to manage the given data.
+    // GL_STATIC_DRAW suggests the data is set once and used many times.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // Simple vertex shader
+    const char* vertex_shader_src = "#version 460 core\n"   // Shader version declaration
+        "layout (location = 0) in vec3 aPos;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+        "}\0";
+    
+    // Create vertex shader object
+    unsigned int vertex_shader;
+    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex_shader, 1, &vertex_shader_src, nullptr);
+    glCompileShader(vertex_shader);
+
+    checkShaderCompilation(vertex_shader);    
+
+    // Simple fragment shader
+    const char* frag_shader_src = "#version 460 core\n"
+        "out vec4 FragColor;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "   FragColor = vec4(1.0f, 0.2f, 1.0f, 1.0f);\n"
+        "}\0";
+    
+    // Create frag shader object
+    unsigned int frag_shader;
+    frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(frag_shader, 1, &frag_shader_src, nullptr);
+    glCompileShader(frag_shader);
+
+    checkShaderCompilation(frag_shader);
+
+    // Create shader program
+    unsigned int shader_program;
+    shader_program = glCreateProgram();
+
+    glAttachShader(shader_program, vertex_shader);
+    glAttachShader(shader_program, frag_shader);
+    glLinkProgram(shader_program);
+
+    checkProgramCompilation(shader_program);
+
+    glUseProgram(shader_program);
+    glDeleteShader(vertex_shader);
+    glDeleteShader(frag_shader);
+
+    // Tell OpenGL how to interpret vertex data
+    // Each vertex attribute takes its data from memory managed by a VBO, and which VBO
+    // it takes from is determined by the VBO currently bound to GL_ARRAY_BUFFER when calling glVertexAttribPointer.
+
+    // 1st param: Specifies which vertex attribute we want to configure.
+    // Since we specified the location of the position vertex attribute in our vertex shader
+    // with layout (location = 0), we pass in 0.
+    // 2nd param: Size of the vertex attribute. It's a vec3, so 3 values.
+    // 3rd param: Type of data. vec1/2/3/4 in GLSL consists of floating point values
+    // 4th param: If the data should be normalized. Not important right now, so false
+    // 5th param: Stride - the space between consecutive vertex attributes.
+    // 6th param: Offset of where the position data begins in the buffer.
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
     while (!glfwWindowShouldClose(window)) {
 
         // Poll and handle events (inputs, window resize, etc)
@@ -75,6 +188,8 @@ int main(int, char**) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // Simple window
         ImGui::Begin("Application");
