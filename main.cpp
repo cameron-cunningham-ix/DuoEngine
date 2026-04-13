@@ -86,12 +86,23 @@ int main(int, char**) {
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     // OpenGL basics
-    // Triangle vertices
+    // Rectangle vertices
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f,
+         0.5f,  0.5f, 0.0f,  // Top right
+         0.5f, -0.5f, 0.0f,  // Bottom right
+        -0.5f, -0.5f, 0.0f,  // Bottom left
+        -0.5f,  0.5f, 0.0f   // Top left
     };
+
+    unsigned int indices[] = {
+        0, 1, 3,    // 1st triangle
+        1, 2, 3     // 2nd triangle
+    };
+
+    unsigned int EBO;
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     // Vertex array object
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
@@ -102,7 +113,7 @@ int main(int, char**) {
     glGenBuffers(1, &VBO);  // Creates one buffer object
      // Binding the VBO buffer means any buffer calls made on the GL_ARRAY_BUFFER target will configure VBO.
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // We copy the triangle vertex data into the buffer's memory. 
+    // We copy the rectangle vertex data into the buffer's memory. 
     // 1st param: buffer type we want to copy data into; this is why we just bound VBO.
     // 2nd param: size of data in bytes. 
     // 3rd param: Actual data
@@ -189,7 +200,8 @@ int main(int, char**) {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Simple window
         ImGui::Begin("Application");
