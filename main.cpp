@@ -7,6 +7,8 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "include/renderer/Shader.hpp"
+
 static void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
@@ -15,30 +17,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-
-void checkShaderCompilation(unsigned int shader) {
-    // Check compilation
-    int success;
-    char info_log[512];
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);  // Checks if shader compilation succeeded
-
-    if (!success) {
-        glGetShaderInfoLog(shader, 512, nullptr, info_log);
-        std::cout << "Error::SHADER::VERTEX::COMPILATION_FAILED\n" << info_log << std::endl;
-    }
-}
-
-void checkProgramCompilation(unsigned int shader_program) {
-    // Check compilation
-    int success;
-    char info_log[512];
-    glGetProgramiv(shader_program, GL_LINK_STATUS, &success);  // Checks if compilation succeeded
-
-    if (!success) {
-        glGetProgramInfoLog(shader_program, 512, nullptr, info_log);
-        std::cout << "Error::PROGRAM::COMPILATION_FAILED\n" << info_log << std::endl;
-    }
-}
 
 int main(int, char**) {
     glfwSetErrorCallback(glfw_error_callback);
@@ -121,52 +99,8 @@ int main(int, char**) {
     // GL_STATIC_DRAW suggests the data is set once and used many times.
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    // Simple vertex shader
-    const char* vertex_shader_src = "#version 460 core\n"   // Shader version declaration
-        "layout (location = 0) in vec3 aPos;\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-        "}\0";
-    
-    // Create vertex shader object
-    unsigned int vertex_shader;
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_src, nullptr);
-    glCompileShader(vertex_shader);
-
-    checkShaderCompilation(vertex_shader);    
-
-    // Simple fragment shader
-    const char* frag_shader_src = "#version 460 core\n"
-        "out vec4 FragColor;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   FragColor = vec4(1.0f, 0.2f, 1.0f, 1.0f);\n"
-        "}\0";
-    
-    // Create frag shader object
-    unsigned int frag_shader;
-    frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(frag_shader, 1, &frag_shader_src, nullptr);
-    glCompileShader(frag_shader);
-
-    checkShaderCompilation(frag_shader);
-
-    // Create shader program
-    unsigned int shader_program;
-    shader_program = glCreateProgram();
-
-    glAttachShader(shader_program, vertex_shader);
-    glAttachShader(shader_program, frag_shader);
-    glLinkProgram(shader_program);
-
-    checkProgramCompilation(shader_program);
-
-    glUseProgram(shader_program);
-    glDeleteShader(vertex_shader);
-    glDeleteShader(frag_shader);
+    // Build and compile shader program
+    Shader basicShader("assets/shaders/basic.vert.glsl", "assets/shaders/basic.frag.glsl");
 
     // Tell OpenGL how to interpret vertex data
     // Each vertex attribute takes its data from memory managed by a VBO, and which VBO
@@ -200,6 +134,8 @@ int main(int, char**) {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        // Render rectangle
+        basicShader.use();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

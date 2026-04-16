@@ -96,10 +96,14 @@ FetchContent_MakeAvailable(nfd)
 # -----------------------------
 add_executable(DuoEngine
   main.cpp
-  
+  src/renderer/Shader.cpp
 )
 
-target_include_directories(DuoEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(DuoEngine PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
 target_link_libraries(DuoEngine PRIVATE glm::glm glad imgui nfd)
 # if(TARGET SDL3::SDL3main)
 #   target_link_libraries(DuoEngine PRIVATE SDL3::SDL3main)
