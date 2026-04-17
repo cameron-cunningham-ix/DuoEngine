@@ -66,10 +66,11 @@ int main(int, char**) {
     // OpenGL basics
     // Rectangle vertices
     float vertices[] = {
-         0.5f,  0.5f, 0.0f,  // Top right
-         0.5f, -0.5f, 0.0f,  // Bottom right
-        -0.5f, -0.5f, 0.0f,  // Bottom left
-        -0.5f,  0.5f, 0.0f   // Top left
+        // positions        // colors
+         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // Top right
+         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // Bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,  // Bottom left
+        -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f   // Top left
     };
 
     unsigned int indices[] = {
@@ -100,7 +101,7 @@ int main(int, char**) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Build and compile shader program
-    Shader basicShader("assets/shaders/basic.glsl");
+    Shader basicShader("assets/shaders/basic_color.glsl");
 
     // Tell OpenGL how to interpret vertex data
     // Each vertex attribute takes its data from memory managed by a VBO, and which VBO
@@ -114,8 +115,12 @@ int main(int, char**) {
     // 4th param: If the data should be normalized. Not important right now, so false
     // 5th param: Stride - the space between consecutive vertex attributes.
     // 6th param: Offset of where the position data begins in the buffer.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // Color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     while (!glfwWindowShouldClose(window)) {
 
