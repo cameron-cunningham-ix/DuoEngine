@@ -100,7 +100,7 @@ int main(int, char**) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Build and compile shader program
-    Shader basicShader("assets/shaders/basic.vert.glsl", "assets/shaders/basic.frag.glsl");
+    Shader basicShader("assets/shaders/basic.glsl");
 
     // Tell OpenGL how to interpret vertex data
     // Each vertex attribute takes its data from memory managed by a VBO, and which VBO

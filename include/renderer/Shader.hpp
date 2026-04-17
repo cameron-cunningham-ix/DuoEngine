@@ -11,8 +11,12 @@ class Shader {
 public:
     unsigned int ID;    // Unique ID of shader program
 
-    // Constructor that reads and builds shader
+    // Constructor that reads and builds shader from one file
+    Shader(const char* filePath);
+    // Constructor that reads and builds shader from two files, vertex and fragment
     Shader(const char* vertexPath, const char* fragmentPath);
+    // Deconstructor
+    ~Shader();
     // Activate shader
     void use();
 
@@ -23,6 +27,7 @@ public:
 private:
     // Utility function for checking shader compilation/linking errors
     void checkCompileErrors(unsigned int shader, std::string type);
+    void CompileShaders(const char* vertexCode, const char* fragmentCode);
 };
 
 #endif

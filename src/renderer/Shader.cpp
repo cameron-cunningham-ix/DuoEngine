@@ -1,5 +1,39 @@
 #include "include/renderer/Shader.hpp"
 
+Shader::Shader(const char* filePath) {
+    std::ifstream stream(filePath);
+
+    enum class ShaderType {
+        NONE = -1, VERTEX = 0, FRAGMENT = 1
+    };
+
+    std::string line;
+    std::stringstream ss[2];
+    ShaderType type = ShaderType::NONE;
+    // Read lines from file
+    while (getline(stream, line)) {
+        // Determine if next section is a new shader
+        if (line.find("#shader") != std::string::npos) {
+            if (line.find("vertex") != std::string::npos) {
+                // Set mode to vertex
+                type = ShaderType::VERTEX;
+            }
+            else if (line.find("fragment") != std::string::npos) {
+                // Set mode to fragment
+                type = ShaderType::FRAGMENT;
+            }
+        }
+        else {
+            ss[(int)type] << line << '\n';
+        }
+    }
+
+    std::string vertexCode = ss[(int)ShaderType::VERTEX].str();
+    std::string fragmentCode = ss[(int)ShaderType::FRAGMENT].str();
+
+    CompileShaders(vertexCode.c_str(), fragmentCode.c_str());
+}
+
 Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     // Get vertex / fragment source code from file paths
     std::string vertexCode;
@@ -32,16 +66,24 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
 
+    CompileShaders(vShaderCode, fShaderCode);
+}
+
+Shader::~Shader() {
+    glDeleteProgram(ID);
+}
+
+void Shader::CompileShaders(const char* vertexCode, const char* fragmentCode) {
     // Compile shaders
     unsigned int vertex, fragment;
     // Vertex shader
     vertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex, 1, &vShaderCode, nullptr);
+    glShaderSource(vertex, 1, &vertexCode, nullptr);
     glCompileShader(vertex);
     checkCompileErrors(vertex, "VERTEX");
     // Fragment shader
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment, 1, &fShaderCode, nullptr);
+    glShaderSource(fragment, 1, &fragmentCode, nullptr);
     glCompileShader(fragment);
     checkCompileErrors(fragment, "FRAGMENT");
     // Shader program
