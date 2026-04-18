@@ -9,6 +9,11 @@ set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+enable_testing()
+
+# Setting options; used in 'cmake -B build' cmd, like 'cmake -B build -DBUILD_TESTS=ON'
+option(BUILD_TESTS "Build unit tests" OFF)
+option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 
 # -----------------------------
 # Default to Release for single-config generators (Ninja/Make)
@@ -92,6 +97,27 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(nfd)
 
 # -----------------------------
+# GoogleTest
+# -----------------------------
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG 52eb8108c5bdec04579160ae17225d66034bd723  # v1.17.0
+)
+# Prevent overriding the parent project's compiler / linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+# -----------------------------
+# GoogleBench
+# -----------------------------
+FetchContent_Declare(
+  benchmark
+  GIT_REPOSITORY https://github.com/google/benchmark.git
+  GIT_TAG 192ef10025eb2c4cdd392bc502f0c852196baa48  # v.1.9.5
+)
+
+
+# -----------------------------
 # Executable
 # -----------------------------
 add_executable(DuoEngine
@@ -122,3 +148,36 @@ set_target_properties(DuoEngine PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIG>"
   ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIG>"
 )
+
+# Unit tests
+if (BUILD_TESTS)
+  FetchContent_MakeAvailable(googletest)
+  add_executable(MathTest
+    tests/unit/math/test_vec2.cpp
+  )
+  target_link_libraries(MathTest
+    GTest::gtest_main
+  )
+  target_include_directories(MathTest PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+  )
+  include(GoogleTest)
+  gtest_discover_tests(MathTest)
+endif()
+
+# Benchmarks
+if (BUILD_BENCHMARKS)
+  set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+  FetchContent_MakeAvailable(benchmark)
+  add_executable(MathBench
+    tests/benchmarks/math/bench_vec2.cpp
+  )
+  target_link_libraries(MathBench
+    benchmark::benchmark_main
+  )
+  target_include_directories(MathBench PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+  )
+endif()
