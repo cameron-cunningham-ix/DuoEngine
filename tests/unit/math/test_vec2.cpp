@@ -168,6 +168,19 @@ TEST_F(Vec2Test, FloatDot) {
     EXPECT_EQ(vf3.dot(vf1), 7);
 }
 
+TEST_F(Vec2Test, FloatLerp) {
+    Vec2f vf1 = Vec2f();
+    Vec2f vf2 = Vec2f(1);
+    Vec2f vf3 = Vec2f(10.0f, 5.0f);
+
+    vf1.lerp(vf2, 0.1);
+    EXPECT_NEAR(vf1.x, 0.1f, FLOAT_ABS_ERROR);
+    EXPECT_NEAR(vf1.y, 0.1f, FLOAT_ABS_ERROR);
+    vf1.lerp(vf2, 1);
+    EXPECT_NEAR(vf1.x, 1.0f, FLOAT_ABS_ERROR);
+    EXPECT_NEAR(vf1.y, 1.0f, FLOAT_ABS_ERROR);
+}
+
 TEST_F(Vec2Test, FloatOperations) {
     Vec2f vi1 = Vec2f();
     Vec2f vi2 = Vec2f(1.5f);
@@ -293,6 +306,19 @@ TEST_F(Vec2Test, DoubleDot) {
     // Const check
     const Vec2d vd3 = Vec2d(3, 4);
     EXPECT_EQ(vd3.dot(vd1), 7);
+}
+
+TEST_F(Vec2Test, DoubleLerp) {
+    Vec2d vd1 = Vec2d();
+    Vec2d vd2 = Vec2d(1.0);
+    Vec2d vd3 = Vec2d(10.0, 5.0);
+
+    vd1.lerp(vd2, 0.1);
+    EXPECT_NEAR(vd1.x, 0.1, DOUBLE_ABS_ERROR);
+    EXPECT_NEAR(vd1.y, 0.1, DOUBLE_ABS_ERROR);
+    vd1.lerp(vd2, 1);
+    EXPECT_NEAR(vd1.x, 1.0, DOUBLE_ABS_ERROR);
+    EXPECT_NEAR(vd1.y, 1.0, DOUBLE_ABS_ERROR);
 }
 
 TEST_F(Vec2Test, DoubleOperations) {

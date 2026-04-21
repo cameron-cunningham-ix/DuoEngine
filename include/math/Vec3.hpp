@@ -45,6 +45,12 @@ namespace RendMath{
             return Vec3<T>((y * v.z - z * v.y), (z * v.x - x * v.z), (x * v.y - y * v.x));
         }
 
+        Vec3<T>& lerp(const Vec3<T>& v, double distance) {
+            static_assert(std::is_floating_point_v<T>, "Vec3<T>.lerp() only supported for float and double types.");
+            x = x + (v.x - x) * distance; y = y + (v.y - y) * distance; z = z + (v.z - z) * distance;
+            return *this;
+        }
+
         bool approxEq(const Vec3<T>& b, T epsilon) const {
             return std::abs(x - b.x) <= epsilon && std::abs(y - b.y) <= epsilon && std::abs(z - b.z) <= epsilon;
         }
@@ -165,6 +171,12 @@ namespace RendMath{
     template<typename T>
     Vec3<T> cross(const Vec3<T>& v, const Vec3<T>& w) {
         return Vec3<T>((v.y * w.z - v.z * w.y), (v.z * w.x - v.x * w.z), (v.x * w.y - v.y * w.x));
+    }
+
+    template<typename T>
+    Vec3<T> lerp(const Vec3<T>& v, const Vec3<T>& w, double distance) {
+        static_assert(std::is_floating_point_v<T>, "Vec3<T>.lerp() only supported for float and double types.");
+        return Vec3<T>(v.x + (w.x - v.x) * distance, v.y + (w.y - v.y) * distance, v.z + (w.z - v.z) * distance);
     }
     
     template<typename T>

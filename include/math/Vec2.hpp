@@ -39,6 +39,14 @@ namespace RendMath{
             return x * v.x + y * v.y;
         }
 
+        // Lerp: Linear Enterpolation
+        // distance: 0 to 1 - distance to vector v, 0 being at this vector, 1 being at vector v
+        Vec2<T>& lerp(const Vec2<T>& v, double distance) {
+            static_assert(std::is_floating_point_v<T>, "Vec2<T>.lerp() only supported for float and double types.");
+            x = x + (v.x - x) * distance; y = y + (v.y - y) * distance;
+            return *this;
+        }
+
         bool approxEq(const Vec2<T>& b, T epsilon) const {
             return std::abs(x - b.x) <= epsilon && std::abs(y - b.y) <= epsilon;
         }
@@ -152,6 +160,12 @@ namespace RendMath{
             return Vec2<T>(v.x * inverse_length, v.y * inverse_length);
         }
         return v;
+    }
+
+    template<typename T>
+    Vec2<T> lerp(const Vec2<T>& v, const Vec2<T>& w, double distance) {
+        static_assert(std::is_floating_point_v<T>, "Vec2<T>.lerp() only supported for float and double types.");
+        return Vec2<T>(v.x + (w.x - v.x) * distance, v.y + (w.y - v.y) * distance);
     }
     
     template<typename T>
