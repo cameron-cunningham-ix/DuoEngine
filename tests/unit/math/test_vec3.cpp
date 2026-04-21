@@ -182,6 +182,21 @@ TEST_F(Vec3Test, FloatDot) {
     EXPECT_EQ(vf3.dot(vf1), 12);
 }
 
+TEST_F(Vec3Test, FloatLerp) {
+    Vec3f vf1 = Vec3f();
+    Vec3f vf2 = Vec3f(1);
+    Vec3f vf3 = Vec3f(10.0f, 5.0f, 20.0f);
+
+    vf1.lerp(vf2, 0.1);
+    EXPECT_NEAR(vf1.x, 0.1f, FLOAT_ABS_ERROR);
+    EXPECT_NEAR(vf1.y, 0.1f, FLOAT_ABS_ERROR);
+    EXPECT_NEAR(vf1.z, 0.1f, FLOAT_ABS_ERROR);
+    vf1.lerp(vf2, 1);
+    EXPECT_NEAR(vf1.x, 1.0f, FLOAT_ABS_ERROR);
+    EXPECT_NEAR(vf1.y, 1.0f, FLOAT_ABS_ERROR);
+    EXPECT_NEAR(vf1.z, 1.0f, FLOAT_ABS_ERROR);
+}
+
 TEST_F(Vec3Test, FloatCross) {
     Vec3f vf1 = Vec3f(1, 0, 0);
     Vec3f vf2 = Vec3f(0, 1, 0);
@@ -355,6 +370,24 @@ TEST_F(Vec3Test, DoubleDot) {
     // Const check
     const Vec3d vd3 = Vec3d(3, 4, 5);
     EXPECT_EQ(vd3.dot(vd1), 12);
+}
+
+TEST_F(Vec3Test, DoubleLerp) {
+    Vec3d vd1 = Vec3d();
+    Vec3d vd2 = Vec3d(1.0);
+
+    vd1.lerp(vd2, 0.1);
+    EXPECT_NEAR(vd1.x, 0.1, DOUBLE_ABS_ERROR);
+    EXPECT_NEAR(vd1.y, 0.1, DOUBLE_ABS_ERROR);
+    EXPECT_NEAR(vd1.z, 0.1, DOUBLE_ABS_ERROR);
+    vd1.lerp(vd2, 0);
+    EXPECT_NEAR(vd1.x, 0.1, DOUBLE_ABS_ERROR);
+    EXPECT_NEAR(vd1.y, 0.1, DOUBLE_ABS_ERROR);
+    EXPECT_NEAR(vd1.z, 0.1, DOUBLE_ABS_ERROR);
+    vd1.lerp(vd2, 1);
+    EXPECT_NEAR(vd1.x, 1.0, DOUBLE_ABS_ERROR);
+    EXPECT_NEAR(vd1.y, 1.0, DOUBLE_ABS_ERROR);
+    EXPECT_NEAR(vd1.z, 1.0, DOUBLE_ABS_ERROR);
 }
 
 TEST_F(Vec3Test, DoubleCross) {

@@ -316,6 +316,9 @@ TEST_F(Vec2Test, DoubleLerp) {
     vd1.lerp(vd2, 0.1);
     EXPECT_NEAR(vd1.x, 0.1, DOUBLE_ABS_ERROR);
     EXPECT_NEAR(vd1.y, 0.1, DOUBLE_ABS_ERROR);
+    vd1.lerp(vd2, 0);
+    EXPECT_NEAR(vd1.x, 0.1, DOUBLE_ABS_ERROR);
+    EXPECT_NEAR(vd1.y, 0.1, DOUBLE_ABS_ERROR);
     vd1.lerp(vd2, 1);
     EXPECT_NEAR(vd1.x, 1.0, DOUBLE_ABS_ERROR);
     EXPECT_NEAR(vd1.y, 1.0, DOUBLE_ABS_ERROR);
