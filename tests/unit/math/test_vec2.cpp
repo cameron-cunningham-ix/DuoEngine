@@ -420,3 +420,27 @@ TEST_F(Vec2Test, ApproxEq) {
     EXPECT_TRUE(approxEq(vd1, vd2, 0.000000000000001));
     EXPECT_FALSE(approxEq(vd1, vd2, 0.0000000000000001));
 }
+
+TEST_F(Vec2Test, Conversions) {
+    // Int to float
+    Vec2i vi1 = Vec2i(10, 20);
+    Vec2f vf1 = (Vec2f)(vi1);
+    EXPECT_EQ(vf1, Vec2f(10.0f, 20.0f));
+    // Int to double
+    Vec2d vd1 = (Vec2d)(vi1);
+    EXPECT_EQ(vd1, Vec2d(10.0, 20.0));
+    // Float to int
+    Vec2f vf2 = Vec2f(25.5f, 15.5f);
+    Vec2i vi2 = (Vec2i)(vf2);
+    EXPECT_EQ(vi2, Vec2i(25, 15));
+    // Float to double
+    Vec2d vd2 = (Vec2d)(vf2);
+    EXPECT_EQ(vd2, Vec2d(25.5, 15.5));
+    // Double to int
+    Vec2d vd3 = Vec2d(15.6, 18.9);
+    Vec2i vi3 = (Vec2i)(vd3);
+    EXPECT_EQ(vi3, Vec2i(15, 18));
+    // Double to float
+    Vec2f vf3 = (Vec2f)(vd3);
+    EXPECT_EQ(vf3, Vec2f(15.6f, 18.9f));
+}

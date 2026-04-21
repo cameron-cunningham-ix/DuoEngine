@@ -499,3 +499,27 @@ TEST_F(Vec3Test, ApproxEq) {
     EXPECT_TRUE(approxEq(vd1, vd2, 0.000000000000001));
     EXPECT_FALSE(approxEq(vd1, vd2, 0.0000000000000001));
 }
+
+TEST_F(Vec3Test, Conversions) {
+    // Int to float
+    Vec3i vi1 = Vec3i(10, 20, 5);
+    Vec3f vf1 = (Vec3f)(vi1);
+    EXPECT_EQ(vf1, Vec3f(10.0f, 20.0f, 5.0f));
+    // Int to double
+    Vec3d vd1 = (Vec3d)(vi1);
+    EXPECT_EQ(vd1, Vec3d(10.0, 20.0, 5.0));
+    // Float to int
+    Vec3f vf2 = Vec3f(25.5f, 15.5f, 7.5f);
+    Vec3i vi2 = (Vec3i)(vf2);
+    EXPECT_EQ(vi2, Vec3i(25, 15, 7));
+    // Float to double
+    Vec3d vd2 = (Vec3d)(vf2);
+    EXPECT_EQ(vd2, Vec3d(25.5, 15.5, 7.5));
+    // Double to int
+    Vec3d vd3 = Vec3d(15.6, 18.9, 13.5);
+    Vec3i vi3 = (Vec3i)(vd3);
+    EXPECT_EQ(vi3, Vec3i(15, 18, 13));
+    // Double to float
+    Vec3f vf3 = (Vec3f)(vd3);
+    EXPECT_EQ(vf3, Vec3f(15.6f, 18.9f, 13.5f));
+}

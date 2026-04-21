@@ -14,6 +14,10 @@ namespace RendMath{
         Vec3(T xx) : x(xx), y(xx), z(xx) {}
         // Three value constructor, initializes x, y, and z components
         Vec3(T xx, T yy, T zz) : x(xx), y(yy), z(zz) {}
+        // Conversion
+        template<typename U>
+        explicit Vec3(const Vec3<U>& other) : x(static_cast<T>(other.x)), y(static_cast<T>(other.y)), z(static_cast<T>(other.z)) {}
+
         T x;
         T y;
         T z;

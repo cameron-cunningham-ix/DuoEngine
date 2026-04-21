@@ -14,6 +14,10 @@ namespace RendMath{
         Vec2(T xx) : x(xx), y(xx) {}
         // Two value constructor, initializes x and y components to first and second parameters respectively
         Vec2(T xx, T yy) : x(xx), y(yy) {}
+        // Conversion
+        template<typename U>
+        explicit Vec2(const Vec2<U>& other) : x(static_cast<T>(other.x)), y(static_cast<T>(other.y)) {}
+
         T x;
         T y;
     
@@ -130,6 +134,7 @@ namespace RendMath{
             return (x != b.x || y != b.y);
         }
     
+        
     };
     
     typedef Vec2<int> Vec2i;
