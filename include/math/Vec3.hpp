@@ -3,14 +3,15 @@
 
 #include <cmath>
 #include <cassert>
+#include <stdexcept>
 
 namespace RendMath{
     template<typename T>
     class Vec3 {
     public:
-        // Default constructor, initializes x and y components to 0
+        // Default constructor, initializes x, y, and z components to 0
         Vec3() : x(T(0)), y(T(0)), z(T(0)) {}
-        // Single value constructor, initializes x and y components to the same value
+        // Single value constructor, initializes x, y, and components to the same value
         Vec3(T xx) : x(xx), y(xx), z(xx) {}
         // Three value constructor, initializes x, y, and z components
         Vec3(T xx, T yy, T zz) : x(xx), y(yy), z(zz) {}
