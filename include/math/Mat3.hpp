@@ -38,7 +38,7 @@ namespace RendMath{
 
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    result(j, i) = m(j, 0) * a(0, i) + m(j, 1) * a(1, i) + m(j, 2) * a(2, i);
+                    result(j, i) = (*this)(j, 0) * a(0, i) + (*this)(j, 1) * a(1, i) + (*this)(j, 2) * a(2, i);
                 }
             }
             return result;
@@ -50,7 +50,7 @@ namespace RendMath{
 
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    result(j, i) = m(j, i) * scalar;
+                    result(j, i) = (*this)(j, i) * scalar;
                 }
             }
             return result;
@@ -59,7 +59,7 @@ namespace RendMath{
         Mat3<T>& operator*=(const T& scalar) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    m(j, i) *= scalar;
+                    (*this)(j, i) *= scalar;
                 }
             }
             return *this;
@@ -69,7 +69,7 @@ namespace RendMath{
         Vec3<T> operator*(const Vec3<T>& v) const {
             Vec3<T> result;
             for (int i = 0; i < 3; i++) {
-                result[i] = v[0] * m(i, 0) + v[1] * m(i, 1) + v[2] * m(i, 2);
+                result[i] = v[0] * (*this)(i, 0) + v[1] * (*this)(i, 1) + v[2] * (*this)(i, 2);
             }
             return result;
         }
@@ -77,7 +77,7 @@ namespace RendMath{
         bool operator==(const Mat3<T>& a) const {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    if (a(j,i) != m(j,i)) return false;
+                    if (a(j,i) != (*this)(j,i)) return false;
                 }
             }
             return true;
@@ -88,25 +88,25 @@ namespace RendMath{
 
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    result(j, i) = m(i, j);
+                    result(j, i) = (*this)(i, j);
                 }
             }
             return result;
         }
 
         Mat3<T>& transposeInPlace() {
-            std::swap(m(1,0), m(0,1));
-            std::swap(m(2,0), m(0,2));
-            std::swap(m(1,2), m(2,1));
+            std::swap((*this)(1,0), (*this)(0,1));
+            std::swap((*this)(2,0), (*this)(0,2));
+            std::swap((*this)(1,2), (*this)(2,1));
 
             return *this;
         }
 
         T determinant() const {
             return (
-                m(0,0) * (m(1,1)*m(2,2) - m(1,2)*m(2,1)) -
-                m(0,1) * (m(1,0)*m(2,2) - m(1,2)*m(2,0)) +
-                m(0,2) * (m(1,0)*m(2,1) - m(1,1)*m(2,0))
+                (*this)(0,0) * ((*this)(1,1)*(*this)(2,2) - (*this)(1,2)*(*this)(2,1)) -
+                (*this)(0,1) * ((*this)(1,0)*(*this)(2,2) - (*this)(1,2)*(*this)(2,0)) +
+                (*this)(0,2) * ((*this)(1,0)*(*this)(2,1) - (*this)(1,1)*(*this)(2,0))
             );
         }
 
@@ -120,17 +120,17 @@ namespace RendMath{
             T inv_det = T(1) / det;
 
             Mat3<T> inverse = {
-                inv_det * (m(1,1)*m(2,2) - m(2,1)*m(1,2)),
-                inv_det * (-(m(0,1)*m(2,2) - m(2,1)*m(0,2))),
-                inv_det * (m(0,1)*m(1,2) - m(1,1)*m(0,2)),
+                inv_det * ((*this)(1,1) * (*this)(2,2) - (*this)(2,1) * (*this)(1,2)),
+                inv_det * (-((*this)(0,1) * (*this)(2,2) - (*this)(2,1) * (*this)(0,2))),
+                inv_det * ((*this)(0,1) * (*this)(1,2) - (*this)(1,1) * (*this)(0,2)),
 
-                inv_det * (-(m(1,0)*m(2,2) - m(2,0)*m(1,2))),
-                inv_det * (m(0,0)*m(2,2) - m(2,0)*m(0,2)),
-                inv_det * (-(m(0,0)*m(1,2) - m(1,0)*m(0,2))),
+                inv_det * (-((*this)(1,0) * (*this)(2,2) - (*this)(2,0) * (*this)(1,2))),
+                inv_det * ((*this)(0,0) * (*this)(2,2) - (*this)(2,0) * (*this)(0,2)),
+                inv_det * (-((*this)(0,0) * (*this)(1,2) - (*this)(1,0) * (*this)(0,2))),
 
-                inv_det * (m(1,0)*m(2,1) - m(2,0)*m(1,1)),
-                inv_det * (-(m(0,0)*m(2,1) - m(2,0)*m(0,1))),
-                inv_det * (m(0,0)*m(1,1) - m(1,0)*m(0,1))
+                inv_det * ((*this)(1,0) * (*this)(2,1) - (*this)(2,0) * (*this)(1,1)),
+                inv_det * (-((*this)(0,0) * (*this)(2,1) - (*this)(2,0) * (*this)(0,1))),
+                inv_det * ((*this)(0,0) * (*this)(1,1) - (*this)(1,0) * (*this)(0,1))
             };
 
             return inverse;
