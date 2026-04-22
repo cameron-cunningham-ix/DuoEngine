@@ -103,6 +103,7 @@ namespace RendMath{
             return *this;
         }
     
+        // TODO: change asserts to throws. Dont know why I thought to make them asserts
         Vec3<T> operator / (const T& t) const {
             assert(t != T(0));
             return Vec3<T>(x / t, y / t, z / t);
