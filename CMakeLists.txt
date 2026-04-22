@@ -155,6 +155,8 @@ if (BUILD_TESTS)
   add_executable(MathTest
     tests/unit/math/test_vec2.cpp
     tests/unit/math/test_vec3.cpp
+    tests/unit/math/test_vec4.cpp
+    tests/unit/math/test_mat3.cpp
   )
   target_link_libraries(MathTest
     GTest::gtest_main
