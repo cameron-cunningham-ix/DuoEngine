@@ -33,6 +33,14 @@ namespace RendMath{
             else if (index == 3) return w;
             else throw std::out_of_range("Vec4 index out of range");
         }
+
+        T& operator[] (size_t index) {
+            if (index == 0) return x;
+            else if (index == 1) return y;
+            else if (index == 2) return z;
+            else if (index == 3) return w;
+            else throw std::out_of_range("Vec4 index out of range");
+        }
     
         // NOTE: == on floats / doubles is for exact equality. For math comparisons use approxEq instead
         bool operator== (const Vec4<T>& b) const {
@@ -50,6 +58,7 @@ namespace RendMath{
     typedef Vec4<float> Vec4f;
     typedef Vec4<double> Vec4d;
     
+    // If v.w is not 0, x, y, and z get divided by w
     template<typename T>
     Vec3<T> toVec3(const Vec4<T>& v) {
         if (v.w == T(0)) return Vec3<T>(v.x, v.y, v.z);

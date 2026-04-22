@@ -66,7 +66,14 @@ namespace RendMath{
             else if (index == 2) return z;
             else throw std::out_of_range("Vec3 index out of range");
         }
-    
+        
+        T& operator[] (size_t index) {
+            if (index == 0) return x;
+            else if (index == 1) return y;
+            else if (index == 2) return z;
+            else throw std::out_of_range("Vec3 index out of range");
+        }
+
         Vec3<T> operator + (const Vec3<T>& v) const {
             return Vec3<T>(x + v.x, y + v.y, z + v.z);
         }
