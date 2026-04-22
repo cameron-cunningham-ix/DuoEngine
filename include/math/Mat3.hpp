@@ -7,6 +7,8 @@
 #include <utility>
 #include <stdexcept>
 
+#include "Vec3.hpp"
+
 namespace RendMath{
     template<typename T>
     class Mat3 {
@@ -41,6 +43,45 @@ namespace RendMath{
             }
             return result;
         }
+        
+        // Scalar multiplication
+        Mat3<T> operator*(const T& scalar) const {
+            Mat3<T> result;
+
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    result(j, i) = m(j, i) * scalar;
+                }
+            }
+            return result;
+        }
+        
+        Mat3<T>& operator*=(const T& scalar) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    m(j, i) *= scalar;
+                }
+            }
+            return *this;
+        }
+
+        // Vector multiplication
+        Vec3<T> operator*(const Vec3<T>& v) const {
+            Vec3<T> result;
+            for (int i = 0; i < 3; i++) {
+                result[i] = v[0] * m(i, 0) + v[1] * m(i, 1) + v[2] * m(i, 2);
+            }
+            return result;
+        }
+
+        bool operator==(const Mat3<T>& a) const {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (a(j,i) != m(j,i)) return false;
+                }
+            }
+            return true;
+        }
 
         Mat3<T> transpose() const {
             Mat3<T> result;
@@ -74,20 +115,6 @@ namespace RendMath{
         //  m(2,0)  m(2,1)  m(2,2)
 
         Mat3<T> inverse() const {
-            // Mat3<T> cofactor = {
-            //     m(1,1)*m(2,2) - m(2,1)*m(1,2),
-            //     -(m(1,0)*m(2,2) - m(2,0)*m(1,2)),
-            //     m(1,0)*m(2,1) - m(2,0)*m(1,1),
-
-            //     -(m(0,1)*m(2,2) - m(2,1)*m(0,2)),
-            //     m(0,0)*m(2,2) - m(2,0)*m(0,2),
-            //     -(m(0,0)*m(2,1) - m(2,0)*m(0,1)),
-
-            //     m(0,1)*m(1,2) - m(1,1)*m(0,2),
-            //     -(m(0,0)*m(1,2) - m(1,0)*m(0,2)),
-            //     m(0,0)*m(1,1) - m(1,0)*m(0,1)
-            // };
-
             T det = determinant();
             if (det == T(0)) throw std::runtime_error("non-invertible matrix");
             T inv_det = T(1) / det;
@@ -109,12 +136,16 @@ namespace RendMath{
             return inverse;
         }
 
-
     };
 
     typedef Mat3<int> Mat3i;
     typedef Mat3<float> Mat3f;
     typedef Mat3<double> Mat3d;
+
+    template<typename T>
+    Mat3<T> operator*(const T& scalar, const Mat3<T>& m) {
+        return m * scalar;
+    }
 }
 
 #endif
