@@ -63,6 +63,18 @@ void Mesh::setupMesh() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
+    // Tell OpenGL how to interpret vertex data
+    // Each vertex attribute takes its data from memory managed by a VBO, and which VBO
+    // it takes from is determined by the VBO currently bound to GL_ARRAY_BUFFER when calling glVertexAttribPointer.
+
+    // 1st param: Specifies which vertex attribute we want to configure.
+    // Since we specified the location of the position vertex attribute in our vertex shader
+    // with layout (location = 0), we pass in 0.
+    // 2nd param: Size of the vertex attribute. It's a Vec3 from Vertex, so 3 values.
+    // 3rd param: Type of data. vec1/2/3/4 in GLSL consists of floating point values
+    // 4th param: If the data should be normalized. Not important right now, so false
+    // 5th param: Stride - the space between consecutive vertex attributes.
+    // 6th param: Offset of where the position data begins in the buffer.
     // Vertex positions
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
