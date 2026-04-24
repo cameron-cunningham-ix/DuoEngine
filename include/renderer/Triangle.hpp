@@ -29,7 +29,7 @@ public:
             temp.position = Vec3f(center.position.x + circumradius * (cos(rotation + i*(2*std::numbers::pi_v<float>)/3)),
                                     center.position.y + circumradius * sin(rotation + i*(2*std::numbers::pi_v<float>)/3),
                                     0.0f);
-            temp.normal = Vec3f();
+            temp.normal = Vec3f(i==0, i==1, i==2);
             
             vertices.push_back(temp);
             indices.push_back(i);
