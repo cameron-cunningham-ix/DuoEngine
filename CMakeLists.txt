@@ -123,6 +123,7 @@ FetchContent_Declare(
 add_executable(DuoEngine
   main.cpp
   src/renderer/Shader.cpp
+  src/renderer/Mesh.cpp
 )
 
 target_include_directories(DuoEngine PRIVATE
