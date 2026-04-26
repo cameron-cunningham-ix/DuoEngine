@@ -98,7 +98,7 @@ int main(int, char**) {
         ImGui::NewFrame();
 
         // Render triangle
-        trans = RendMath::Mat4f::translate(Mat4f(), RendMath::Vec3f(rotX, 0, 0));
+        trans = RendMath::Mat4f::translate(Mat4f(), RendMath::Vec3f(rotX, rotY, 0));
         basicShader.use();
         basicShader.setMatrix4f("transform", trans);
         tri1.mesh.drawMesh(basicShader);
@@ -106,9 +106,9 @@ int main(int, char**) {
         // Simple window
         ImGui::Begin("Application");
         ImGui::Text("Triangle");
-        ImGui::SliderFloat("Rotation X", &rotX, 0, 2*std::numbers::pi_v<float>);
-        ImGui::SliderFloat("Rotation Y", &rotY, 0, 2*std::numbers::pi_v<float>);
-        ImGui::SliderFloat("Rotation Z", &rotZ, 0, 2*std::numbers::pi_v<float>);
+        ImGui::SliderFloat("Rotation X", &rotX, -2*std::numbers::pi_v<float>, 2*std::numbers::pi_v<float>);
+        ImGui::SliderFloat("Rotation Y", &rotY, -2*std::numbers::pi_v<float>, 2*std::numbers::pi_v<float>);
+        ImGui::SliderFloat("Rotation Z", &rotZ, -2*std::numbers::pi_v<float>, 2*std::numbers::pi_v<float>);
         ImGui::End();
 
         // Render
