@@ -71,6 +71,15 @@ int main(int, char**) {
     Triangle tri1;
     tri1.build();
 
+    // Vector math
+    RendMath::Vec4f vec(0.0f, 0.0f, 0.0f, 0.0f);
+    RendMath::Mat4f trans;
+    trans = RendMath::Mat4f::translate(Mat4f(), RendMath::Vec3f(0.0f, 0.0f, 0.0f));
+
+    float rotX = 0.0f;
+    float rotY = 0.0f;
+    float rotZ= 0.0f;
+
     while (!glfwWindowShouldClose(window)) {
 
         // Poll and handle events (inputs, window resize, etc)
@@ -89,11 +98,17 @@ int main(int, char**) {
         ImGui::NewFrame();
 
         // Render triangle
+        trans = RendMath::Mat4f::translate(Mat4f(), RendMath::Vec3f(rotX, 0, 0));
+        basicShader.use();
+        basicShader.setMatrix4f("transform", trans);
         tri1.mesh.drawMesh(basicShader);
 
         // Simple window
         ImGui::Begin("Application");
-        ImGui::Text("Test");
+        ImGui::Text("Triangle");
+        ImGui::SliderFloat("Rotation X", &rotX, 0, 2*std::numbers::pi_v<float>);
+        ImGui::SliderFloat("Rotation Y", &rotY, 0, 2*std::numbers::pi_v<float>);
+        ImGui::SliderFloat("Rotation Z", &rotZ, 0, 2*std::numbers::pi_v<float>);
         ImGui::End();
 
         // Render

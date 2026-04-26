@@ -113,6 +113,10 @@ void Shader::setFloat(const std::string& name, float value) const {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
+void Shader::setMatrix4f(const std::string& name, RendMath::Mat4f matrix) const {
+    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &matrix(0,0));
+}
+
 void Shader::checkCompileErrors(unsigned int shader, std::string type) {
     int success;
     char info_log[1024];

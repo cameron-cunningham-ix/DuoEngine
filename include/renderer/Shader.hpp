@@ -7,6 +7,8 @@
 #include <sstream>
 #include <iostream>
 
+#include "math/Mat4.hpp"
+
 class Shader {
 public:
     unsigned int ID;    // Unique ID of shader program
@@ -23,6 +25,7 @@ public:
     void setBool(const std::string &name, bool value) const;
     void setInt(const std::string &name, int value) const;
     void setFloat(const std::string &name, float value) const;
+    void setMatrix4f(const std::string &name, RendMath::Mat4f matrix) const;
 
 private:
     // Utility function for checking shader compilation/linking errors

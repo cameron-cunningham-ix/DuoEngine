@@ -13,7 +13,7 @@ namespace RendMath{
     template<typename T>
     class Mat3 {
     public:
-        // Identity constructor
+        // Default constructor; identity matrix
         Mat3() {
             m = {1, 0, 0, 0, 1, 0, 0, 0, 1};
         }
@@ -30,6 +30,10 @@ namespace RendMath{
         
         T operator()(int row, int col) const {
             return m[col * 3 + row];
+        }
+
+        static Mat3<T> identity() {
+            return Mat3<T>(T(1), T(0), T(0), T(0), T(1), T(0), T(0), T(0), T(1));
         }
 
         // Matrix multiplication
