@@ -10,7 +10,7 @@ using namespace RendMath;
 
 class Triangle : public Shape {
 public:
-    // Triangle shape data? should be enough to calculate points
+    // Triangle shape data
     Vertex center = Vertex {
         Vec3f(), Vec3f()
     };

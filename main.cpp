@@ -10,6 +10,7 @@
 #include "include/math/Vec2.hpp"
 #include "include/renderer/Shader.hpp"
 #include "include/renderer/Triangle.hpp"
+#include "include/renderer/Rectangle.hpp"
 
 static void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -68,8 +69,10 @@ int main(int, char**) {
     // Build and compile shader program
     Shader basicShader("assets/shaders/basic_color.glsl");
 
-    Triangle tri1;
-    tri1.build();
+    // Triangle tri1;
+    // tri1.build();
+    Rectangle rect1;
+    rect1.build();
 
     // Vector math
     RendMath::Vec4f vec(0.0f, 0.0f, 0.0f, 0.0f);
@@ -100,15 +103,15 @@ int main(int, char**) {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // Render triangle
+        // Render shape
         trans = RendMath::Mat4f::rotate(Mat4f(), rotZ, RendMath::Vec3f(rotateOnX, rotateOnY, rotateOnZ));
         basicShader.use();
         basicShader.setMatrix4f("transform", trans);
-        tri1.mesh.drawMesh(basicShader);
+        rect1.mesh.drawMesh(basicShader);
 
         // Simple window
         ImGui::Begin("Application");
-        ImGui::Text("Triangle");
+        ImGui::Text("Shape");
         ImGui::SliderFloat("Rotation X", &rotX, -2*std::numbers::pi_v<float>, 2*std::numbers::pi_v<float>);
         ImGui::SliderFloat("Rotation Y", &rotY, -2*std::numbers::pi_v<float>, 2*std::numbers::pi_v<float>);
         ImGui::SliderFloat("Rotation Z", &rotZ, -2*std::numbers::pi_v<float>, 2*std::numbers::pi_v<float>);
