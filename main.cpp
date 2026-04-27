@@ -78,7 +78,10 @@ int main(int, char**) {
 
     float rotX = 0.0f;
     float rotY = 0.0f;
-    float rotZ= 0.0f;
+    float rotZ = 0.0f;
+    int rotateOnX = 0;
+    int rotateOnY = 0;
+    int rotateOnZ = 0;
 
     while (!glfwWindowShouldClose(window)) {
 
@@ -98,7 +101,7 @@ int main(int, char**) {
         ImGui::NewFrame();
 
         // Render triangle
-        trans = RendMath::Mat4f::translate(Mat4f(), RendMath::Vec3f(rotX, rotY, 0));
+        trans = RendMath::Mat4f::rotate(Mat4f(), rotZ, RendMath::Vec3f(rotateOnX, rotateOnY, rotateOnZ));
         basicShader.use();
         basicShader.setMatrix4f("transform", trans);
         tri1.mesh.drawMesh(basicShader);
@@ -109,6 +112,9 @@ int main(int, char**) {
         ImGui::SliderFloat("Rotation X", &rotX, -2*std::numbers::pi_v<float>, 2*std::numbers::pi_v<float>);
         ImGui::SliderFloat("Rotation Y", &rotY, -2*std::numbers::pi_v<float>, 2*std::numbers::pi_v<float>);
         ImGui::SliderFloat("Rotation Z", &rotZ, -2*std::numbers::pi_v<float>, 2*std::numbers::pi_v<float>);
+        ImGui::SliderInt("Rotate on X", &rotateOnX, -1, 1);
+        ImGui::SliderInt("Rotate on Y", &rotateOnY, -1, 1);
+        ImGui::SliderInt("Rotate on Z", &rotateOnZ, -1, 1);
         ImGui::End();
 
         // Render

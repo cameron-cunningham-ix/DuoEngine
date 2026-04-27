@@ -260,6 +260,31 @@ namespace RendMath{
                                     T(vector.x), T(vector.y), T(vector.z), T(1));
         }
 
+        static Mat4<T> rotate(Mat4<T> matrix, float radians, Vec3<T> vector) {
+            float cosine = cos(radians);
+            float sine = sin(radians);
+            Mat4<T> result = Mat4<T>();
+            if (vector.x != T(0)) {
+                result = result * Mat4<T>(T(1), T(0), T(0), T(0),
+                                T(0), T(cosine), T(sine), T(0),
+                                T(0), T(-sine), T(cosine), T(0),
+                                T(0), T(0), T(0), T(1));
+            }
+            if (vector.y != T(0)) {
+                result = result * Mat4<T>(T(cosine), T(0), T(-sine), T(0),
+                                T(0), T(1), T(0), T(0),
+                                T(sine), T(0), T(cosine), T(0),
+                                T(0), T(0), T(0), T(1));
+            }
+            if (vector.z != T(0)) {
+                result = result * Mat4<T>(T(cosine), T(sine), T(0), T(0),
+                                T(-sine), T(cosine), T(0), T(0),
+                                T(0), T(0), T(1), T(0),
+                                T(0), T(0), T(0), T(1));
+            }
+            return result;
+        }
+
     };
 
     typedef Mat4<int> Mat4i;
