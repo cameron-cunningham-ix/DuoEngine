@@ -27,7 +27,7 @@ public:
 
         vertices.push_back(center);
 
-        for (unsigned int i = 0; i < numSides; i++) {
+        for (unsigned int i = 0; i < numSides+1; i++) {
             Vertex temp;
             temp.position = Vec3f(center.position.x + circumradius * (cos(rotation + i*(2*std::numbers::pi_v<float>)/numSides)),
                                     center.position.y + circumradius * sin(rotation + i*(2*std::numbers::pi_v<float>)/numSides),
@@ -39,6 +39,8 @@ public:
                 indices.insert(indices.end(), {0, i-1, i});
             }
         }
+        // Fill in gap
+        indices.insert(indices.end(), {0, 1, numSides});
     }
 
     void build() {
