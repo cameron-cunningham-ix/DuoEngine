@@ -35,7 +35,7 @@ public:
             temp.normal = Vec3f(i==0, i==1, i==2);
             
             vertices.push_back(temp);
-            if (i % 3 == 2) {
+            if (i >= 2) {
                 indices.insert(indices.end(), {0, i-1, i});
             }
         }
