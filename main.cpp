@@ -11,6 +11,7 @@
 #include "include/renderer/Shader.hpp"
 #include "include/renderer/Triangle.hpp"
 #include "include/renderer/Rectangle.hpp"
+#include "include/renderer/Circle.hpp"
 
 static void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -71,8 +72,10 @@ int main(int, char**) {
 
     // Triangle tri1;
     // tri1.build();
-    Rectangle rect1;
-    rect1.build();
+    // Rectangle rect1;
+    // rect1.build();
+    Circle circle1;
+    circle1.build();
 
     // Vector math
     RendMath::Vec4f vec(0.0f, 0.0f, 0.0f, 0.0f);
@@ -107,7 +110,7 @@ int main(int, char**) {
         trans = RendMath::Mat4f::rotate(Mat4f(), rotZ, RendMath::Vec3f(rotateOnX, rotateOnY, rotateOnZ));
         basicShader.use();
         basicShader.setMatrix4f("transform", trans);
-        rect1.mesh.drawMesh(basicShader);
+        circle1.mesh.drawMesh(basicShader);
 
         // Simple window
         ImGui::Begin("Application");
