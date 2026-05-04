@@ -122,21 +122,13 @@ namespace RendMath{
         T determinant() const {
             T result = T(0);
 
-            result += (*this)(0,0) * ((*this)(1,1) * ((*this)(2,2)*(*this)(3,3) - (*this)(2,3)*(*this)(3,2)) -
-                                     (*this)(1,2) * ((*this)(2,1)*(*this)(3,3) - (*this)(2,3)*(*this)(3,1)) +
-                                     (*this)(1,3) * ((*this)(2,1)*(*this)(3,2) - (*this)(2,2)*(*this)(3,1)));
+            result += (*this)(0,0) * calculate3x3Det(0,0);
 
-            result -= (*this)(1,0) * ((*this)(0,1) * ((*this)(2,2)*(*this)(3,3) - (*this)(2,3)*(*this)(3,2)) -
-                                     (*this)(0,2) * ((*this)(2,1)*(*this)(3,3) - (*this)(2,3)*(*this)(3,1)) +
-                                     (*this)(0,3) * ((*this)(2,1)*(*this)(3,2) - (*this)(2,2)*(*this)(3,1)));
+            result -= (*this)(1,0) * calculate3x3Det(1,0);
 
-            result += (*this)(2,0) * ((*this)(0,1) * ((*this)(1,2)*(*this)(3,3) - (*this)(1,3)*(*this)(3,2)) -
-                                     (*this)(0,2) * ((*this)(1,1)*(*this)(3,3) - (*this)(1,3)*(*this)(3,1)) +
-                                     (*this)(0,3) * ((*this)(1,1)*(*this)(3,2) - (*this)(1,2)*(*this)(3,1)));
+            result += (*this)(2,0) * calculate3x3Det(2,0);
             
-            result -= (*this)(3,0) * ((*this)(0,1) * ((*this)(1,2)*(*this)(2,3) - (*this)(1,3)*(*this)(2,2)) -
-                                     (*this)(0,2) * ((*this)(1,1)*(*this)(2,3) - (*this)(1,3)*(*this)(2,1)) +
-                                     (*this)(0,3) * ((*this)(1,1)*(*this)(2,2) - (*this)(1,2)*(*this)(2,1)));
+            result -= (*this)(3,0) * calculate3x3Det(3,0);
             return result;
         }
 
@@ -149,7 +141,7 @@ namespace RendMath{
         /// @param row 
         /// @param col
         /// @return 
-        T calculate3x3det(int row, int col) const {
+        T calculate3x3Det(int row, int col) const {
             switch(col*4 + row) {
                 case 0:
                     return (*this)(1,1) * ((*this)(2,2)*(*this)(3,3) - (*this)(2,3)*(*this)(3,2)) -
@@ -230,25 +222,25 @@ namespace RendMath{
             T inv_det = T(1) / det;
 
             Mat4<T> inverse = {
-                inv_det * calculate3x3det(0,0),
-                inv_det * -calculate3x3det(1,0),
-                inv_det * calculate3x3det(2,0),
-                inv_det * -calculate3x3det(3,0),
+                inv_det * calculate3x3Det(0,0),
+                inv_det * -calculate3x3Det(1,0),
+                inv_det * calculate3x3Det(2,0),
+                inv_det * -calculate3x3Det(3,0),
 
-                inv_det * -calculate3x3det(0,1),
-                inv_det * calculate3x3det(1,1),
-                inv_det * -calculate3x3det(2,1),
-                inv_det * calculate3x3det(3,1),
+                inv_det * -calculate3x3Det(0,1),
+                inv_det * calculate3x3Det(1,1),
+                inv_det * -calculate3x3Det(2,1),
+                inv_det * calculate3x3Det(3,1),
 
-                inv_det * calculate3x3det(0,2),
-                inv_det * -calculate3x3det(1,2),
-                inv_det * calculate3x3det(2,2),
-                inv_det * -calculate3x3det(3,2),
+                inv_det * calculate3x3Det(0,2),
+                inv_det * -calculate3x3Det(1,2),
+                inv_det * calculate3x3Det(2,2),
+                inv_det * -calculate3x3Det(3,2),
 
-                inv_det * -calculate3x3det(0,3),
-                inv_det * calculate3x3det(1,3),
-                inv_det * -calculate3x3det(2,3),
-                inv_det * calculate3x3det(3,3),
+                inv_det * -calculate3x3Det(0,3),
+                inv_det * calculate3x3Det(1,3),
+                inv_det * -calculate3x3Det(2,3),
+                inv_det * calculate3x3Det(3,3),
             };
             return inverse;
         }
